@@ -25,12 +25,48 @@
        
     <target name="build" depends="compile">
         <mkdir dir="${dist}"/>
+        <mkdir dir="output" />
         <jar destfile="${dist}/BatchJHaml.jar" basedir="${build}">
             <manifest>
                 <attribute name="Main-Class" value="com.progriff.jhaml.BatchJHaml"/>
             </manifest>
         </jar>
     </target>
+
+    <target name="run-tests" depends="build" description="unit testing" >
+         <mkdir dir="${unittest}/raw/" />
+         <mkdir dir="${unittest}/outputTest/" />
+         <delete>
+             <fileset dir="${unittest}/raw/" />
+         </delete>
+        <junit printsummary="yes" haltonfailure="yes" showoutput="yes" > 
+            <classpath>
+                <pathelement path="${build}"/>
+                <path refid="classpath"/>
+            </classpath>
+            
+            <batchtest fork="yes" todir="${unittest}/raw/"> 
+                <formatter type="xml"/> 
+                <fileset dir="${src}"> 
+                    <include name="**/*Test*.java"/> 
+                </fileset> 
+            </batchtest> 
+        </junit> 
+    </target>
+
+    <target name ="test" depends="run-tests">
+        <mkdir dir="${docs}/unitTest/" />
+        <delete>
+            <fileset dir="${docs}/unitTest/" />
+        </delete>
+        <junitreport todir="${unittest}">
+            <fileset dir="${unittest}/raw/">
+                <include name="TEST-*.xml"/>
+            </fileset>
+                <report format="frames" todir="${docs}/unitTest/"/>
+        </junitreport>
+    </target>
+	
     <target name="run">
         <java fork="true" classname="com.progriff.jhaml.BatchJHaml">
             <classpath>
