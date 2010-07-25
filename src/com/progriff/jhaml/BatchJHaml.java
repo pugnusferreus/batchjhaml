@@ -114,7 +114,7 @@ public class BatchJHaml {
      * @param hamlOutput The hamlOutput from JHaml
      * @throws IOException if unable to write to the folder for some reason
      */
-    private void writeToFile(File outputFile, String hamlOutput) 
+    public void writeToFile(File outputFile, String hamlOutput) 
                                                     throws IOException {
         
         String layout = this.layouts.get("application.haml");
@@ -125,10 +125,11 @@ public class BatchJHaml {
     
     /**
      * Iterates the layouts in the haml/layouts folder and stores the
-     * processed MarkUp into a HashMap
+     * processed MarkUp into a HashMap. The key is the filename.
      */
-    private void populateLayouts() {
+    public void populateLayouts() {
         JHaml jhaml = new JHaml();
+        this.layouts.clear();
         File file = new File(this.hamlPath + SEPERATOR + "layouts");
         for(File layoutFile: file.listFiles(getFilenameFilter())) {
             try {
@@ -150,11 +151,44 @@ public class BatchJHaml {
      * @return JSP String
      * @throws IOException if unable to read the file.
      */
-    private String getHamlOutput(File hamlFile) throws IOException{
+    public String getHamlOutput(File hamlFile) throws IOException{
         JHaml jhaml = new JHaml();
         return jhaml.parse(FileUtils.readFileToString(hamlFile));
     }
     
+    
+    public String getHamlPath() {
+        return hamlPath;
+    }
+
+    public void setHamlPath(String hamlPath) {
+        this.hamlPath = hamlPath;
+    }
+
+    public String getOutputPath() {
+        return outputPath;
+    }
+
+    public void setOutputPath(String outputPath) {
+        this.outputPath = outputPath;
+    }
+
+    public String getOutputExtension() {
+        return outputExtension;
+    }
+
+    public void setOutputExtension(String outputExtension) {
+        this.outputExtension = outputExtension;
+    }
+
+    public HashMap<String, String> getLayouts() {
+        return layouts;
+    }
+
+    public void setLayouts(HashMap<String, String> layouts) {
+        this.layouts = layouts;
+    }
+
     public static void main(String[] args) {
         BatchJHaml batch = new BatchJHaml();
         batch.generateOutput();
