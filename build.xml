@@ -39,7 +39,7 @@
          <delete>
              <fileset dir="${unittest}/raw/" />
          </delete>
-        <junit printsummary="yes" haltonfailure="yes" showoutput="yes" > 
+        <junit printsummary="yes" haltonfailure="false" showoutput="yes" > 
             <classpath>
                 <pathelement path="${build}"/>
                 <path refid="classpath"/>

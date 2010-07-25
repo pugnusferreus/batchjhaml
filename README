@@ -6,10 +6,13 @@ Prerequisites :
   3.) Guava 
   4.) JHaml
   5.) MarkdownJ
+  6.) JUnit
   
 Usage :
   1.) Install ant
   2.) run "ant build" to compile the source and create a jar file.
   3.) run "ant run" to convert your Haml files to jsp.
+  4.) run "ant createJavaDoc" to generate java docs.
+  5.) run "ant test" to run unit test
   
 Copyright (c) 2010 Benson Lim Cheng San. See LICENSE for details.
