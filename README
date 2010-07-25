@@ -12,4 +12,4 @@ Usage :
   2.) run "ant build" to compile the source and create a jar file.
   3.) run "ant run" to convert your Haml files to jsp.
   
-Copyright © 2010 Benson Lim Cheng San. See LICENSE for details.
+Copyright (c) 2010 Benson Lim Cheng San. See LICENSE for details.
