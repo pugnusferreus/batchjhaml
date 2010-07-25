@@ -39,4 +39,19 @@
             </classpath>
         </java>
     </target>
+    <target name="createJavaDoc" depends="build">
+        <javadoc packagenames="com.progriff.jhaml.*" sourcepath="${src}"
+                defaultexcludes="yes"
+                destdir="${javaDoc}"
+                author="true"
+                version="true"
+                use="true"
+                windowtitle="Batch JHaml">
+           <classpath>
+                <path refid="classpath"/>
+           </classpath>
+           <doctitle><![CDATA[<h1>Batch JHaml</h1>]]></doctitle>
+           <bottom><![CDATA[<i>Copyright (c) 2010 Benson Lim Cheng San</i>]]></bottom>
+        </javadoc>
+   </target> 
 </project>
