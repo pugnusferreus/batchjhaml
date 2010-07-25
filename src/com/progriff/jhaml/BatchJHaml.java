@@ -21,6 +21,10 @@ public class BatchJHaml {
      */
     private String hamlPath;
     /**
+     * Path where the haml layout files are
+     */
+    private String hamlLayoutPath;
+    /**
      * Path where the output files will be generated
      */
     private String outputPath;
@@ -48,6 +52,7 @@ public class BatchJHaml {
      */
     public BatchJHaml() {
         this(CURRENT_PATH + SEPERATOR + "haml", 
+                CURRENT_PATH + SEPERATOR + "haml" + SEPERATOR + "layouts", 
                 CURRENT_PATH + SEPERATOR + "output", 
                 "jsp");
     }
@@ -59,11 +64,13 @@ public class BatchJHaml {
      * @param outputExtension The name of the extension to append
      */
     public BatchJHaml(String hamlPath,
+                        String hamlLayoutPath,
                         String outputPath,
                         String outputExtension) {
         this.hamlPath = hamlPath;
         this.outputPath = outputPath;
         this.outputExtension = outputExtension;
+        this.hamlLayoutPath = hamlLayoutPath;
     }
     
     /**
@@ -130,7 +137,7 @@ public class BatchJHaml {
     public void populateLayouts() {
         JHaml jhaml = new JHaml();
         this.layouts.clear();
-        File file = new File(this.hamlPath + SEPERATOR + "layouts");
+        File file = new File(this.hamlLayoutPath);
         for(File layoutFile: file.listFiles(getFilenameFilter())) {
             try {
                 this.layouts.put(layoutFile.getName(), 
@@ -187,6 +194,15 @@ public class BatchJHaml {
 
     public void setLayouts(HashMap<String, String> layouts) {
         this.layouts = layouts;
+    }
+
+    
+    public String getHamlLayoutPath() {
+        return hamlLayoutPath;
+    }
+
+    public void setHamlLayoutPath(String hamlLayoutPath) {
+        this.hamlLayoutPath = hamlLayoutPath;
     }
 
     public static void main(String[] args) {
