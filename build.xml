@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project name="BatchJHaml" default="build" basedir=".">
+    <property name="src" value="src"/>
+    <property name="build" value="bin"/>
+    <property name="dist" value="dist"/>
+    <property name="javaDoc" value="docs/javadoc"/>
+    <property name="docs" value="docs"/>
+    <property name="unittest" value="unitTest"/>
+    <property name="lib"  location="lib"/>
+	<path id="classpath">
+	        <fileset dir="lib" includes="**/*.jar"/>
+	    </path>
+    <target name="compile">
+        <mkdir dir="${build}" />
+        <delete>
+            <fileset dir="${build}" />
+        </delete>
+
+        <javac srcdir="${src}" destdir="${build}" source="1.6" excludes="manifest/**">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </javac>
+    </target>
+       
+    <target name="build" depends="compile">
+        <mkdir dir="${dist}"/>
+        <jar destfile="${dist}/BatchJHaml.jar" basedir="${build}">
+            <manifest>
+                <attribute name="Main-Class" value="com.progriff.jhaml.BatchJHaml"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="run">
+        <java fork="true" classname="com.progriff.jhaml.BatchJHaml">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${dist}/BatchJHaml.jar"/>
+            </classpath>
+        </java>
+    </target>
+</project>
