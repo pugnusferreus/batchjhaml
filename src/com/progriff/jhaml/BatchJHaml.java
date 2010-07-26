@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.HashMap;
 
 import org.apache.commons.io.FileUtils;
@@ -81,21 +80,21 @@ public class BatchJHaml {
      * from your app.
      */
     public void generateOutput() {
-        File file = new File(this.hamlPath);
+        File file = new File( this.hamlPath );
         populateLayouts();
         
-        for(File hamlFile: file.listFiles(getFilenameFilter())) {
+        for ( File hamlFile: file.listFiles( getFilenameFilter() ) ) {
             try {
-                String hamlOutput = getHamlOutput(hamlFile);
+                String hamlOutput = getHamlOutput( hamlFile );
                 File outputFile = new File(
                         this.outputPath + 
                         SEPERATOR + 
                         StringUtils.replace(hamlFile.getName(), ".haml", "." + 
-                                this.outputExtension));
+                                this.outputExtension) );
                 
-                writeToFile(outputFile, hamlOutput);
+                writeToFile( outputFile, hamlOutput );
             }
-            catch(IOException ioe) {
+            catch( IOException ioe ) {
                 ioe.printStackTrace();
             }
         }
@@ -111,7 +110,7 @@ public class BatchJHaml {
      */
     public FilenameFilter getFilenameFilter() {
         return new FilenameFilter() {
-            public boolean accept(File dir, String name) {
+            public boolean accept( File dir, String name ) {
                 return !name.startsWith(".") && name.endsWith(".haml");
             }
         };
@@ -124,32 +123,26 @@ public class BatchJHaml {
      * @param hamlOutput The hamlOutput from JHaml
      * @throws IOException if unable to write to the folder for some reason
      */
-    public void writeToFile(File outputFile, String hamlOutput) 
+    public void writeToFile( File outputFile, String hamlOutput ) 
                                                     throws IOException {
         
-        String layout = this.layouts.get("application.haml");
+        String layout = this.layouts.get( "application.haml" );
         
-        FileWriter fstream = new FileWriter(outputFile);
-        BufferedWriter out = new BufferedWriter(fstream);
-        for(String layoutLine: layout.split("\n")) {
-            System.out.println(layoutLine);
-            if(!layoutLine.contains("<%= yield %>")) {
+        FileWriter fstream = new FileWriter( outputFile );
+        BufferedWriter out = new BufferedWriter( fstream );
+        
+        for ( String layoutLine: layout.split("\n") ) {
+            if( !layoutLine.contains("<%= yield %>") ) {
                 out.write(layoutLine + "\n");
-            }
-            else {
+            } else {
                 String frontSpace = layoutLine.split("<%=")[0];
-                for(String contentLine: hamlOutput.split("\n")) {
+                
+                for ( String contentLine: hamlOutput.split("\n") ) {
                     out.write(frontSpace + "" + contentLine + "\n");
                 }
             }
         }
         out.close();
-        
-        
-        //FileUtils.writeStringToFile(outputFile, 
-         //       StringUtils.replace(layout, "<%= yield %>", hamlOutput) );
-                
-                
     }
     
     /**
@@ -160,12 +153,12 @@ public class BatchJHaml {
         JHaml jhaml = new JHaml();
         this.layouts.clear();
         File file = new File(this.hamlLayoutPath);
-        for(File layoutFile: file.listFiles(getFilenameFilter())) {
+        for( File layoutFile: file.listFiles( getFilenameFilter() ) ) {
             try {
-                this.layouts.put(layoutFile.getName(), 
-                        jhaml.parse(FileUtils.readFileToString(layoutFile)));
+                this.layouts.put( layoutFile.getName(), 
+                        jhaml.parse(FileUtils.readFileToString(layoutFile)) );
             }
-            catch(IOException ioe) {
+            catch( IOException ioe ) {
                 System.err.println("Unable to convert layout : " + 
                                         layoutFile.getName());
                 ioe.printStackTrace();
@@ -182,7 +175,7 @@ public class BatchJHaml {
      */
     public String getHamlOutput(File hamlFile) throws IOException{
         JHaml jhaml = new JHaml();
-        return jhaml.parse(FileUtils.readFileToString(hamlFile));
+        return jhaml.parse( FileUtils.readFileToString(hamlFile) );
     }
     
     
