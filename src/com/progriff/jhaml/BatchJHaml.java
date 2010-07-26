@@ -1,8 +1,11 @@
 package com.progriff.jhaml;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 
 import org.apache.commons.io.FileUtils;
@@ -126,8 +129,27 @@ public class BatchJHaml {
         
         String layout = this.layouts.get("application.haml");
         
-        FileUtils.writeStringToFile(outputFile, 
-                StringUtils.replace(layout, "<%= yield %>", hamlOutput) );
+        FileWriter fstream = new FileWriter(outputFile);
+        BufferedWriter out = new BufferedWriter(fstream);
+        for(String layoutLine: layout.split("\n")) {
+            System.out.println(layoutLine);
+            if(!layoutLine.contains("<%= yield %>")) {
+                out.write(layoutLine + "\n");
+            }
+            else {
+                String frontSpace = layoutLine.split("<%=")[0];
+                for(String contentLine: hamlOutput.split("\n")) {
+                    out.write(frontSpace + "" + contentLine + "\n");
+                }
+            }
+        }
+        out.close();
+        
+        
+        //FileUtils.writeStringToFile(outputFile, 
+         //       StringUtils.replace(layout, "<%= yield %>", hamlOutput) );
+                
+                
     }
     
     /**
