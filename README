@@ -9,10 +9,17 @@ Prerequisites :
   6.) JUnit
   
 Usage :
-  1.) Install ant
-  2.) run "ant build" to compile the source and create a jar file.
-  3.) run "ant run" to convert your Haml files to jsp.
-  4.) run "ant createJavaDoc" to generate java docs.
-  5.) run "ant test" to run unit test
+  1.) install ant
+  2.) create a "lib" folder and put all jars mentioned above in there.
+  3.) run "ant build" to compile the source and create a jar file.
+  4.) create an "output" folder. This is where your jsps will be generated.
+  5.) create a "haml" folder and a "layouts" folder inside the "haml" folder. This is where your haml files will sit.
+  6.) run "ant run" to convert your Haml files to jsp.
+  7.) run "ant createJavaDoc" to generate java docs.
+  8.) run "ant test" to run unit test
   
+Note:
+  1.) Only 1 layout is supported at the moment, which is application.haml
+  2.) Only yield is supported so far.
+    
 Copyright (c) 2010 Benson Lim Cheng San. See LICENSE for details.
