@@ -14,6 +14,7 @@ Usage :
   3.) run "ant build" to compile the source and create a jar file.
   4.) create an "output" folder. This is where your jsps will be generated.
   5.) create a "haml" folder and a "layouts" folder inside the "haml" folder. This is where your haml files will sit.
+  6.) modify the build.properties accordingly.
   6.) run "ant run" to convert your Haml files to jsp.
   7.) run "ant createJavaDoc" to generate java docs.
   8.) run "ant test" to run unit test

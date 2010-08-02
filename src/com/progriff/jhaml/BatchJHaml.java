@@ -221,7 +221,25 @@ public class BatchJHaml {
     }
 
     public static void main(String[] args) {
-        BatchJHaml batch = new BatchJHaml();
+    	String hamlPath;
+        String hamlLayoutPath;
+        String outputPath;
+        String outputExtension;
+        BatchJHaml batch; 
+        
+        if( args.length < 1 ) {
+            batch = new BatchJHaml();
+        } else if( args.length == 4 ){
+            hamlPath = args[0];
+            hamlLayoutPath = args[1];
+            outputPath = args[2];
+            outputExtension = args[3];
+            batch = new BatchJHaml(hamlPath, hamlLayoutPath, outputPath, outputExtension);
+        } else {
+            System.err.println("Usage: BatchJHaml <hamlPath> <hamlLayoutPath> <outputPath> <outputExtension>");
+            return;	
+        }
+        
         batch.generateOutput();
         System.out.println("File Generation Completed!");
         
