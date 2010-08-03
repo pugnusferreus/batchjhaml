@@ -137,16 +137,17 @@ public class BatchJHaml {
         
         FileWriter fstream = new FileWriter( outputFile );
         BufferedWriter out = new BufferedWriter( fstream );
-        //"- @layout = \"contact\""
         
         for ( String layoutLine: layout.split("\n") ) {
-            if( !layoutLine.contains("<%= yield %>") ) {
+        	if( !layoutLine.contains("<%= yield %>") ) {
                 out.write(layoutLine + "\n");
             } else {
                 String frontSpace = layoutLine.split("<%=")[0];
                 
                 for ( String contentLine: hamlOutput.split("\n") ) {
-                    out.write(frontSpace + "" + contentLine + "\n");
+                	if (!contentLine.contains("@layout") ) {
+                    	out.write(frontSpace + "" + contentLine + "\n");
+                	}
                 }
             }
         }
