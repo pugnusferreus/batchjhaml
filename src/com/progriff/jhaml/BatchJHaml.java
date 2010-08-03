@@ -96,8 +96,9 @@ public class BatchJHaml {
                 
                 writeToFile( outputFile, hamlOutput );
             }
-            catch( IOException ioe ) {
-                ioe.printStackTrace();
+            catch( Exception e ) {
+            	System.err.println("Unable to convert haml file : " + hamlFile.getName());
+                e.printStackTrace();
             }
         }
     }
@@ -126,7 +127,7 @@ public class BatchJHaml {
      * @throws IOException if unable to write to the folder for some reason
      */
     public void writeToFile( File outputFile, String hamlOutput ) 
-                                                    throws IOException {
+                                                    throws Exception {
         
         String layout = MarkUpUtil.getLayoutName(hamlOutput); 
         
@@ -167,10 +168,10 @@ public class BatchJHaml {
                 this.layouts.put( layoutFile.getName(), 
                         jhaml.parse(FileUtils.readFileToString(layoutFile)) );
             }
-            catch( IOException ioe ) {
+            catch( Exception e ) {
                 System.err.println("Unable to convert layout : " + 
                                         layoutFile.getName());
-                ioe.printStackTrace();
+                e.printStackTrace();
             }
         }
         
