@@ -19,8 +19,7 @@ Usage :
   7.) run "ant createJavaDoc" to generate java docs.
   8.) run "ant test" to run unit test
   
-Note:
-  1.) Only 1 layout is supported at the moment, which is application.haml
-  2.) Only yield is supported so far.
-    
-Copyright (c) 2010 Benson Lim Cheng San. See LICENSE for details.
+Note :
+  To use a custom layout for your Haml view, set the `@layout` variable at the beginning of the file: `- @layout = 'foo'`
+  
+Copyright (c) 2010 Benson Lim. See LICENSE for details.

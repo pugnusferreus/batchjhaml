@@ -11,11 +11,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.cadrlife.jhaml.JHaml;
+import com.progriff.jhaml.util.MarkUpUtil;
 
 /**
- * 
- * @author Benson Lim
+ * <p>
  * Creates JSP or HTML in batch ala Staticmatic style.
+ * </p>
+ * @author Benson Lim
  */
 public class BatchJHaml {
     /**
@@ -126,10 +128,16 @@ public class BatchJHaml {
     public void writeToFile( File outputFile, String hamlOutput ) 
                                                     throws IOException {
         
-        String layout = this.layouts.get( "application.haml" );
+        String layout = MarkUpUtil.getLayoutName(hamlOutput); 
+        
+        if(layout == null)
+            layout = this.layouts.get( "application.haml" );
+        else
+            layout = this.layouts.get(layout + ".haml"); 
         
         FileWriter fstream = new FileWriter( outputFile );
         BufferedWriter out = new BufferedWriter( fstream );
+        //"- @layout = \"contact\""
         
         for ( String layoutLine: layout.split("\n") ) {
             if( !layoutLine.contains("<%= yield %>") ) {
