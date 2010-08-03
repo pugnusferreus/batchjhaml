@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <project name="BatchJHaml" default="build" basedir=".">
+    <property file="build.properties" />
+    
+    
     <property name="src" value="src"/>
     <property name="build" value="bin"/>
     <property name="dist" value="dist"/>
@@ -73,6 +76,10 @@
                 <path refid="classpath"/>
                 <path location="${dist}/BatchJHaml.jar"/>
             </classpath>
+            <arg value="${haml.path}"/>
+            <arg value="${haml.layout.path}"/>
+            <arg value="${haml.output.path}"/>
+            <arg value="${haml.output.extension}"/>
         </java>
     </target>
     <target name="createJavaDoc" depends="build">
