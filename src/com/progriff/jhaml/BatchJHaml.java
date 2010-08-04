@@ -119,7 +119,7 @@ public class BatchJHaml {
                     
                     if(scriptNames != null) {
                         for(String scriptName:scriptNames) {
-                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript'>\n");
+                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript' />\n");
                         }
                     }
                     
@@ -127,7 +127,7 @@ public class BatchJHaml {
                     
                     if(scriptNames != null) {
                         for(String scriptName:scriptNames) {
-                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript'>\n");
+                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript' />\n");
                         }
                     }
                 } else {
@@ -137,8 +137,12 @@ public class BatchJHaml {
                 String frontSpace = layoutLine.split("<%=")[0];
                 
                 for ( String contentLine: hamlOutput.split("\n") ) {
-                	if (!contentLine.contains("@layout") ) {
-                    	out.write(frontSpace + "" + contentLine + "\n");
+                	if (contentLine.contains("@layout") ) {
+                    	
+                	} else if (contentLine.contains("@javascripts") ) {
+                		
+                	} else {
+                	    out.write(frontSpace + "" + contentLine + "\n");	
                 	}
                 }
             }
