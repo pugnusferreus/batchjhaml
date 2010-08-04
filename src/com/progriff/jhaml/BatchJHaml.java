@@ -6,11 +6,14 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.cadrlife.jhaml.JHaml;
+import com.progriff.jhaml.model.Configuration;
+import com.progriff.jhaml.util.FileUtil;
 import com.progriff.jhaml.util.MarkUpUtil;
 
 /**
@@ -20,22 +23,9 @@ import com.progriff.jhaml.util.MarkUpUtil;
  * @author Benson Lim
  */
 public class BatchJHaml {
-    /**
-     * Path where the haml files are
-     */
-    private String hamlPath;
-    /**
-     * Path where the haml layout files are
-     */
-    private String hamlLayoutPath;
-    /**
-     * Path where the output files will be generated
-     */
-    private String outputPath;
-    /**
-     * The output's extension.
-     */
-    private String outputExtension;
+    
+    private Configuration configuration;
+    
     /**
      * The current path where the application will run
      */
@@ -55,10 +45,12 @@ public class BatchJHaml {
      * Default constructor.
      */
     public BatchJHaml() {
-        this(CURRENT_PATH + SEPERATOR + "haml", 
+        this.configuration = new Configuration(CURRENT_PATH + SEPERATOR + "haml", 
                 CURRENT_PATH + SEPERATOR + "haml" + SEPERATOR + "layouts", 
                 CURRENT_PATH + SEPERATOR + "output", 
-                "jsp");
+                "jsp",
+                CURRENT_PATH + SEPERATOR + "scripts",
+                CURRENT_PATH + SEPERATOR + "stylesheets");
     }
     
     /**
@@ -67,14 +59,8 @@ public class BatchJHaml {
      * @param outputPath Path to output
      * @param outputExtension The name of the extension to append
      */
-    public BatchJHaml(String hamlPath,
-                        String hamlLayoutPath,
-                        String outputPath,
-                        String outputExtension) {
-        this.hamlPath = hamlPath;
-        this.outputPath = outputPath;
-        this.outputExtension = outputExtension;
-        this.hamlLayoutPath = hamlLayoutPath;
+    public BatchJHaml(Configuration configuration) {
+        this.configuration = configuration;
     }
     
     /**
@@ -82,17 +68,17 @@ public class BatchJHaml {
      * from your app.
      */
     public void generateOutput() {
-        File file = new File( this.hamlPath );
+        File file = new File( configuration.getHamlPath() );
         populateLayouts();
         
-        for ( File hamlFile: file.listFiles( getFilenameFilter() ) ) {
+        for ( File hamlFile: file.listFiles( FileUtil.getHamlFilenameFilter() ) ) {
             try {
                 String hamlOutput = getHamlOutput( hamlFile );
                 File outputFile = new File(
-                        this.outputPath + 
+                        configuration.getOutputPath() + 
                         SEPERATOR + 
                         StringUtils.replace(hamlFile.getName(), ".haml", "." + 
-                                this.outputExtension) );
+                                configuration.getOutputExtension()) );
                 
                 writeToFile( outputFile, hamlOutput );
             }
@@ -103,21 +89,7 @@ public class BatchJHaml {
         }
     }
     
-    /**
-     * Returns a filter that accepts filenames that: <br/>
-     * <ul>
-     *   <li/> doesn't start with "."
-     *   <li/> ends with ".haml"
-     * </ul>
-     * @return the FilenameFilter object.
-     */
-    public FilenameFilter getFilenameFilter() {
-        return new FilenameFilter() {
-            public boolean accept( File dir, String name ) {
-                return !name.startsWith(".") && name.endsWith(".haml");
-            }
-        };
-    }
+    
     
     /**
      * Writes the output to the output folder. Replaces <%= yield %> to use
@@ -140,8 +112,27 @@ public class BatchJHaml {
         BufferedWriter out = new BufferedWriter( fstream );
         
         for ( String layoutLine: layout.split("\n") ) {
-        	if( !layoutLine.contains("<%= yield %>") ) {
-                out.write(layoutLine + "\n");
+            if( !layoutLine.contains("<%= yield %>") ) {
+                if(layoutLine.contains("<%= javascripts")) {
+                    
+                    List<String> scriptNames = MarkUpUtil.getScriptNames(layoutLine);
+                    
+                    if(scriptNames != null) {
+                        for(String scriptName:scriptNames) {
+                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript'>\n");
+                        }
+                    }
+                    
+                    scriptNames = MarkUpUtil.getIndividualFileScripts(hamlOutput);
+                    
+                    if(scriptNames != null) {
+                        for(String scriptName:scriptNames) {
+                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript'>\n");
+                        }
+                    }
+                } else {
+                    out.write(layoutLine + "\n");
+                }
             } else {
                 String frontSpace = layoutLine.split("<%=")[0];
                 
@@ -162,8 +153,8 @@ public class BatchJHaml {
     public void populateLayouts() {
         JHaml jhaml = new JHaml();
         this.layouts.clear();
-        File file = new File(this.hamlLayoutPath);
-        for( File layoutFile: file.listFiles( getFilenameFilter() ) ) {
+        File file = new File(configuration.getHamlLayoutPath());
+        for( File layoutFile: file.listFiles( FileUtil.getHamlFilenameFilter() ) ) {
             try {
                 this.layouts.put( layoutFile.getName(), 
                         jhaml.parse(FileUtils.readFileToString(layoutFile)) );
@@ -187,31 +178,6 @@ public class BatchJHaml {
         JHaml jhaml = new JHaml();
         return jhaml.parse( FileUtils.readFileToString(hamlFile) );
     }
-    
-    
-    public String getHamlPath() {
-        return hamlPath;
-    }
-
-    public void setHamlPath(String hamlPath) {
-        this.hamlPath = hamlPath;
-    }
-
-    public String getOutputPath() {
-        return outputPath;
-    }
-
-    public void setOutputPath(String outputPath) {
-        this.outputPath = outputPath;
-    }
-
-    public String getOutputExtension() {
-        return outputExtension;
-    }
-
-    public void setOutputExtension(String outputExtension) {
-        this.outputExtension = outputExtension;
-    }
 
     public HashMap<String, String> getLayouts() {
         return layouts;
@@ -221,32 +187,18 @@ public class BatchJHaml {
         this.layouts = layouts;
     }
 
-    
-    public String getHamlLayoutPath() {
-        return hamlLayoutPath;
-    }
-
-    public void setHamlLayoutPath(String hamlLayoutPath) {
-        this.hamlLayoutPath = hamlLayoutPath;
-    }
 
     public static void main(String[] args) {
-    	String hamlPath;
-        String hamlLayoutPath;
-        String outputPath;
-        String outputExtension;
+        
         BatchJHaml batch; 
         
         if( args.length < 1 ) {
             batch = new BatchJHaml();
-        } else if( args.length == 4 ){
-            hamlPath = args[0];
-            hamlLayoutPath = args[1];
-            outputPath = args[2];
-            outputExtension = args[3];
-            batch = new BatchJHaml(hamlPath, hamlLayoutPath, outputPath, outputExtension);
+        } else if( args.length == 6 ){
+            Configuration configuration = new Configuration(args[0],args[1],args[2],args[3],args[4],args[5]);
+            batch = new BatchJHaml(configuration);
         } else {
-            System.err.println("Usage: BatchJHaml <hamlPath> <hamlLayoutPath> <outputPath> <outputExtension>");
+            System.err.println("Usage: BatchJHaml <hamlPath> <hamlLayoutPath> <outputPath> <outputExtension> <scriptPath> <styleSheetPath>");
             return;	
         }
         

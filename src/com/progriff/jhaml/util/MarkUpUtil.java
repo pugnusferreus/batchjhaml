@@ -1,5 +1,8 @@
 package com.progriff.jhaml.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>Utilities for the markup</p>
  * @author Benson Lim
@@ -29,4 +32,46 @@ public class MarkUpUtil {
         }
         return null;
     }
+    
+    public static List<String> getScriptNames(String outputLine) {
+        outputLine = outputLine.replace("<%= javascripts", "");
+        outputLine = outputLine.replace("%>","");
+        outputLine = outputLine.replace("'","");
+        outputLine = outputLine.replace("\"","");
+        if(outputLine.trim().length() == 0) {
+            return null;
+        }
+        
+        String[] temp = outputLine.split(",");
+        ArrayList<String> scriptNames = new ArrayList<String>();
+        for(String name:temp) {
+            scriptNames.add(name.trim());
+        }
+        return scriptNames;
+    }
+    
+    public static List<String> getIndividualFileScripts(String hamlOutput) {
+        String[] temp = hamlOutput.split("\n");
+        for(String eachLine: temp) {
+            if(eachLine.contains("<% @javascripts")) {
+                eachLine = eachLine.replace("<% @javascripts", "");
+                eachLine = eachLine.replace("%>", "");
+                eachLine = eachLine.replace("'", "");
+                eachLine = eachLine.replace("\"", "");
+                
+                if(eachLine.trim().length() == 0) {
+                    return null;
+                }
+                
+                String[] temp2 = eachLine.split(",");
+                ArrayList<String> scriptNames = new ArrayList<String>();
+                for(String name:temp2) {
+                    scriptNames.add(name.trim());
+                }
+                return scriptNames;
+            }
+        }
+        return null;
+    }
+
 }

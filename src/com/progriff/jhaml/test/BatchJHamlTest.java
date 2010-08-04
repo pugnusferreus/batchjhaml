@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.progriff.jhaml.BatchJHaml;
+import com.progriff.jhaml.model.Configuration;
 
 import junit.framework.TestCase;
 
@@ -21,10 +22,13 @@ public class BatchJHamlTest extends TestCase {
     private String hamlPath = CURRENT_PATH + SEPERATOR + "unitTest" + SEPERATOR + "hamlTest"; 
     private String hamlLayoutPath = CURRENT_PATH + SEPERATOR + "unitTest" + SEPERATOR + "hamlTest" + SEPERATOR + "layouts"; 
     private String outputPath = CURRENT_PATH + SEPERATOR + "unitTest" + SEPERATOR + "outputTest";
+    private String scriptPath = CURRENT_PATH + SEPERATOR + "unitTest" + SEPERATOR + "scriptTest";
+    private String styleSheetPath = CURRENT_PATH + SEPERATOR + "unitTest" + SEPERATOR + "styleSheetTest";
     
     @Before
     public void setUp() {
-        batchJHaml = new BatchJHaml(hamlPath,hamlLayoutPath,outputPath,"jsp");
+        Configuration configuration = new Configuration(hamlPath,hamlLayoutPath,outputPath,"jsp",scriptPath,styleSheetPath);
+        batchJHaml = new BatchJHaml(configuration);
     }
     
     @Test
@@ -39,28 +43,7 @@ public class BatchJHamlTest extends TestCase {
         assertNull(batchJHaml.getLayouts().get("test.haml"));
     }
     
-    @Test
-    public void testGetFolderWithNoLayout() {
-        batchJHaml.setHamlLayoutPath(outputPath);
-        batchJHaml.populateLayouts();
-        assertTrue(batchJHaml.getLayouts().size() < 1);
-        batchJHaml.setHamlPath(hamlLayoutPath);
-    }
-    
-    @Test
-    public void testGetInvalidLayoutFolder() {
-        try {
-            batchJHaml.setHamlLayoutPath("sdfsdf");
-            batchJHaml.populateLayouts();
-            assertTrue(false);
-        }
-        catch(Exception e) {
-            assertTrue(true);
-        } finally {
-            batchJHaml.setHamlLayoutPath(hamlLayoutPath);
-        }
-        
-    }
+   
     
     @Test
     public void testGetContentOutput() throws IOException {
