@@ -80,6 +80,8 @@
             <arg value="${haml.layout.path}"/>
             <arg value="${haml.output.path}"/>
             <arg value="${haml.output.extension}"/>
+            <arg value="${haml.javascript.path}"/>
+            <arg value="${haml.stylesheet.path}"/>
         </java>
     </target>
     <target name="createJavaDoc" depends="build">
