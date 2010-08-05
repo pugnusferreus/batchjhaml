@@ -90,7 +90,6 @@ public class BatchJHaml {
     }
     
     
-    
     /**
      * Writes the output to the output folder. Replaces <%= yield %> to use
      * the content markup
@@ -114,12 +113,12 @@ public class BatchJHaml {
         for ( String layoutLine: layout.split("\n") ) {
             if( !layoutLine.contains("<%= yield %>") ) {
                 if(layoutLine.contains("<%= javascripts")) {
-                    
+                    // add javascript tags                    
                     List<String> scriptNames = MarkUpUtil.getScriptNames(layoutLine);
                     
                     if(scriptNames != null) {
                         for(String scriptName:scriptNames) {
-                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript' />\n");
+                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript'></script>\n");
                         }
                     }
                     
@@ -127,9 +126,27 @@ public class BatchJHaml {
                     
                     if(scriptNames != null) {
                         for(String scriptName:scriptNames) {
-                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript' />\n");
+                            out.write("    <script language='javascript' src='" + configuration.getScriptPath() + "/" + scriptName + ".js' type='text/javascript' ></script>\n");
                         }
                     }
+                } else if ( layoutLine.contains("<%= stylesheets") ) {
+                    //add style sheet tags
+                    List<String> styleSheetNames = MarkUpUtil.getStyleSheetNames(layoutLine);
+                    if(styleSheetNames != null) {
+                        for(String styleSheetName:styleSheetNames) {
+                            out.write("    <link rel='stylesheet' media='all' type='text/css' href='" + configuration.getStyleSheetPath() + "/" + styleSheetName + ".css' />\n");
+                        }
+                    }
+                    
+                    styleSheetNames = MarkUpUtil.getIndividualFileStyleSheets(hamlOutput);
+                    
+                    if(styleSheetNames != null) {
+                        for(String styleSheetName:styleSheetNames) {
+                            out.write("    <link rel='stylesheet' media='all' type='text/css' href='" + configuration.getStyleSheetPath() + "/" + styleSheetName + ".css' />\n");
+                        }
+                    }
+
+                    
                 } else {
                     out.write(layoutLine + "\n");
                 }
@@ -140,6 +157,8 @@ public class BatchJHaml {
                 	if (contentLine.contains("@layout") ) {
                     	
                 	} else if (contentLine.contains("@javascripts") ) {
+                		
+                	} else if (contentLine.contains("@stylesheets") ) {
                 		
                 	} else {
                 	    out.write(frontSpace + "" + contentLine + "\n");	

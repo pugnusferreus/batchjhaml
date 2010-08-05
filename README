@@ -23,5 +23,6 @@ Note :
   - To use a custom layout for your Haml view, set the `@layout` variable at the beginning of the file: `- @layout = 'foo'`
   - To use the javascript helper, add `= javascripts 'foo'` in the %head
   - If you need custom javascripts for each page, add `= javascripts` in your layout's %head and for each page, add `- @javascripts 'foo','bar'`
+  - If you need custom style sheets for each page, add `= stylesheets` in your layout's %head and for each page, add `- @stylesheets 'foo','bar'`
   
 Copyright (c) 2010 Benson Lim. See LICENSE for details.
