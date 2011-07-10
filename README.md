@@ -23,5 +23,29 @@ Note :
   - To use a custom layout for your Haml view, set the `@layout` variable at the beginning of the file: `- @layout = 'foo'`
   - To use the javascript helper, add `= javascripts 'foo'` in the %head
   - If you need custom javascripts for each page, add `= javascripts` in your layout's %head and for each page, add `- @javascripts 'foo','bar'`
-  
-Copyright (c) 2010 Benson Lim. See LICENSE for details.
+
+Ant build.xml integration :
+{% highlight xml %}
+<target name="compile-haml">
+  <echo message="Converting haml files into jsp ..." />
+  <java fork="true" classname="com.progriff.jhaml.BatchJHaml">
+    <classpath>
+      <fileset dir="${library.home}">
+        <include name="**/commons-io-*.jar" />
+        <include name="**/commons-lang-*.jar" />
+        <include name="**/guava-*.jar" />
+        <include name="**/jhaml-*.jar" />
+        <include name="**/markdownj-*.jar" />
+      </fileset>
+      <path location="${library.home}/BatchJHaml.jar"/>
+    </classpath>
+    <arg value="${haml.path}"/>
+    <arg value="${haml.layout.path}"/>
+    <arg value="${haml.output.path}"/>
+    <arg value="${haml.output.extension}"/>
+    <arg value="${haml.javascript.path}"/>
+    <arg value="${haml.stylesheet.path}"/>
+  </java>
+</target>
+{% endhighlight %}
+Copyright (c) 2011 Benson Lim. See LICENSE for details.
