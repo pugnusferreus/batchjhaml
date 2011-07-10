@@ -50,6 +50,23 @@ public class MarkUpUtil {
         return scriptNames;
     }
     
+    public static List<String> getStyleSheetNames(String outputLine) {
+        outputLine = outputLine.replace("<%= stylesheets", "");
+        outputLine = outputLine.replace("%>","");
+        outputLine = outputLine.replace("'","");
+        outputLine = outputLine.replace("\"","");
+        if(outputLine.trim().length() == 0) {
+            return null;
+        }
+        
+        String[] temp = outputLine.split(",");
+        ArrayList<String> styleSheetNames = new ArrayList<String>();
+        for(String name:temp) {
+            styleSheetNames.add(name.trim());
+        }
+        return styleSheetNames;
+    }
+    
     public static List<String> getIndividualFileScripts(String hamlOutput) {
         String[] temp = hamlOutput.split("\n");
         for(String eachLine: temp) {
@@ -69,6 +86,30 @@ public class MarkUpUtil {
                     scriptNames.add(name.trim());
                 }
                 return scriptNames;
+            }
+        }
+        return null;
+    }
+    
+    public static List<String> getIndividualFileStyleSheets(String hamlOutput) {
+        String[] temp = hamlOutput.split("\n");
+        for(String eachLine: temp) {
+            if(eachLine.contains("<% @stylesheets")) {
+                eachLine = eachLine.replace("<% @stylesheets", "");
+                eachLine = eachLine.replace("%>", "");
+                eachLine = eachLine.replace("'", "");
+                eachLine = eachLine.replace("\"", "");
+                
+                if(eachLine.trim().length() == 0) {
+                    return null;
+                }
+                
+                String[] temp2 = eachLine.split(",");
+                ArrayList<String> styleSheetNames = new ArrayList<String>();
+                for(String name:temp2) {
+                    styleSheetNames.add(name.trim());
+                }
+                return styleSheetNames;
             }
         }
         return null;
