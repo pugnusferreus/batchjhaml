@@ -25,7 +25,8 @@ Note :
   - If you need custom javascripts for each page, add `= javascripts` in your layout's %head and for each page, add `- @javascripts 'foo','bar'`
 
 Ant build.xml integration :
-{% highlight xml %}
+Add the following in your build.xml. Of course, you can modify it accordingly.
+
 <target name="compile-haml">
   <echo message="Converting haml files into jsp ..." />
   <java fork="true" classname="com.progriff.jhaml.BatchJHaml">
@@ -47,5 +48,5 @@ Ant build.xml integration :
     <arg value="${haml.stylesheet.path}"/>
   </java>
 </target>
-{% endhighlight %}
+
 Copyright (c) 2011 Benson Lim. See LICENSE for details.
