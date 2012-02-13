@@ -252,7 +252,7 @@ public class BatchJHaml {
             try {
                 Configuration configuration = new Configuration(args);
                 batch = new BatchJHaml(configuration);
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
                 System.err
                         .println("Usage: BatchJHaml <hamlPath> <hamlLayoutPath> <outputPath> <outputExtension> <scriptPath> <styleSheetPath>");

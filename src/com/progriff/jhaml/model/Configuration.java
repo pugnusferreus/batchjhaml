@@ -18,22 +18,29 @@ public class Configuration {
      * 
      * @param args
      */
-    public Configuration(String[] args) throws ArrayIndexOutOfBoundsException,
-            NullPointerException {
+    public Configuration(String[] args) throws IllegalArgumentException {
+        try {
+            boolean recursive = false;
+            if (args.length == 7) {
+                recursive = Boolean.parseBoolean(args[6]);
+            }
 
-        boolean recursive = false;
-        if (args.length == 7) {
-            recursive = Boolean.parseBoolean(args[6]);
+            this.hamlPath = args[0];
+            this.hamlLayoutPath = args[1];
+            this.outputPath = args[2];
+            this.outputExtension = args[3];
+            this.scriptPath = args[4];
+            this.styleSheetPath = args[5];
+            this.recursive = recursive;
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException(
+                    "Unable to parse args[]. Array index out of bound occured",
+                    e);
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException(
+                    "Unable to parse args[]. Null pointer exception occured", e);
         }
-
-        this.hamlPath = args[0];
-        this.hamlLayoutPath = args[1];
-        this.outputPath = args[2];
-        this.outputExtension = args[3];
-        this.scriptPath = args[4];
-        this.styleSheetPath = args[5];
-        this.recursive = recursive;
-
     }
 
     public Configuration(String hamlPath, String hamlLayoutPath,
