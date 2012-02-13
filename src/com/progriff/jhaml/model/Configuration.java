@@ -7,23 +7,45 @@ public class Configuration {
     private String outputExtension;
     private String scriptPath;
     private String styleSheetPath;
-    
+    private boolean recursive = false;
+
     public Configuration() {
-        
+
     }
 
-    public Configuration(String hamlPath, 
-                            String hamlLayoutPath,
-                            String outputPath,
-                            String outputExtension,
-                            String scriptPath,
-                            String styleSheetPath) {
+    /**
+     * To parse this from
+     * 
+     * @param args
+     */
+    public Configuration(String[] args) throws ArrayIndexOutOfBoundsException,
+            NullPointerException {
+
+        boolean recursive = false;
+        if (args.length == 7) {
+            recursive = Boolean.parseBoolean(args[6]);
+        }
+
+        this.hamlPath = args[0];
+        this.hamlLayoutPath = args[1];
+        this.outputPath = args[2];
+        this.outputExtension = args[3];
+        this.scriptPath = args[4];
+        this.styleSheetPath = args[5];
+        this.recursive = recursive;
+
+    }
+
+    public Configuration(String hamlPath, String hamlLayoutPath,
+            String outputPath, String outputExtension, String scriptPath,
+            String styleSheetPath, boolean recursive) {
         this.hamlPath = hamlPath;
         this.hamlLayoutPath = hamlLayoutPath;
         this.outputPath = outputPath;
         this.outputExtension = outputExtension;
         this.scriptPath = scriptPath;
         this.styleSheetPath = styleSheetPath;
+        this.recursive = recursive;
     }
 
     public String getHamlPath() {
@@ -73,4 +95,13 @@ public class Configuration {
     public void setStyleSheetPath(String styleSheetPath) {
         this.styleSheetPath = styleSheetPath;
     }
+
+    public boolean isRecursive() {
+        return recursive;
+    }
+
+    public void setRecursive(boolean recursive) {
+        this.recursive = recursive;
+    }
+
 }
