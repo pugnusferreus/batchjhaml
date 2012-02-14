@@ -30,11 +30,7 @@ public class BatchJHaml {
      * The current path where the application will run
      */
     private final static String CURRENT_PATH = System.getProperty("user.dir");
-    /**
-     * File seperator.
-     */
-    private final static String SEPERATOR = System
-            .getProperty("file.separator");
+
     /**
      * Haml can have multiple layouts. This map is to store them. BatchJHaml
      * only supports application.haml at the moment
@@ -45,11 +41,12 @@ public class BatchJHaml {
      * Default constructor.
      */
     public BatchJHaml() {
-        this.configuration = new Configuration(CURRENT_PATH + SEPERATOR
-                + "haml", CURRENT_PATH + SEPERATOR + "haml" + SEPERATOR
-                + "layouts", CURRENT_PATH + SEPERATOR + "output", "jsp",
-                CURRENT_PATH + SEPERATOR + "scripts", CURRENT_PATH + SEPERATOR
-                        + "stylesheets", false);
+        this.configuration = new Configuration(CURRENT_PATH
+                + FileUtil.SEPERATOR + "haml", CURRENT_PATH
+                + FileUtil.SEPERATOR + "haml" + FileUtil.SEPERATOR + "layouts",
+                CURRENT_PATH + FileUtil.SEPERATOR + "output", "jsp",
+                CURRENT_PATH + FileUtil.SEPERATOR + "scripts", CURRENT_PATH
+                        + FileUtil.SEPERATOR + "stylesheets", false);
     }
 
     /**
@@ -78,9 +75,17 @@ public class BatchJHaml {
 
         for (File hamlFile : fileList) {
             try {
+                String subdir = FileUtil.getSubDirectory(hamlFile,
+                        configuration.getHamlPath());
+
+                if (isLayoutFolder(configuration.getHamlPath() + subdir))
+                    continue;
+
+                createFolderIfNotExists(configuration.getOutputPath() + subdir);
+
                 String hamlOutput = getHamlOutput(hamlFile);
                 File outputFile = new File(configuration.getOutputPath()
-                        + SEPERATOR
+                        + subdir
                         + StringUtils.replace(hamlFile.getName(), ".haml", "."
                                 + configuration.getOutputExtension()));
 
@@ -227,6 +232,25 @@ public class BatchJHaml {
         return jhaml.parse(FileUtils.readFileToString(hamlFile));
     }
 
+    private boolean isLayoutFolder(String path) {
+        File file = new File(path);
+        File hamlLayout = new File(configuration.getHamlLayoutPath());
+        if (file.getAbsolutePath().equalsIgnoreCase(
+                hamlLayout.getAbsolutePath()))
+            return true;
+        else
+            return false;
+    }
+
+    private void createFolderIfNotExists(String path) {
+        File file = new File(path);
+        if (!file.exists())
+            file.mkdir();
+    }
+
+    /*
+     * Getters and setters
+     */
     public HashMap<String, String> getLayouts() {
         return layouts;
     }

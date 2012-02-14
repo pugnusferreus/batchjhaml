@@ -11,6 +11,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 public class FileUtil {
+
+    /**
+     * File seperator.
+     */
+    public final static String SEPERATOR = System.getProperty("file.separator");
+
     /**
      * Returns a filter that accepts filenames that: <br/>
      * <ul>
@@ -46,4 +52,8 @@ public class FileUtil {
 
     }
 
+    public static String getSubDirectory(File file, String hamlPath) {
+        String[] temp = file.getPath().split(hamlPath + SEPERATOR);
+        return SEPERATOR + temp[1].replace(file.getName(), "");
+    }
 }
