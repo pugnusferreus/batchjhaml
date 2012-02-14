@@ -4,12 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.StringUtils;
 
 import com.cadrlife.jhaml.JHaml;
@@ -73,17 +71,12 @@ public class BatchJHaml {
      * your app.
      */
     public void generateOutput() {
-        File file = new File(configuration.getHamlPath());
         populateLayouts();
-        Collection<File> found = FileUtils.listFiles(
-                new File(configuration.getHamlPath()), TrueFileFilter.INSTANCE,
-                TrueFileFilter.INSTANCE);
 
-        for (File x : found) {
-            System.out.println(x);
-        }
+        List<File> fileList = FileUtil.listFiles(configuration.getHamlPath(),
+                FileUtil.getHamlFilenameFilter(), configuration.isRecursive());
 
-        for (File hamlFile : file.listFiles(FileUtil.getHamlFilenameFilter())) {
+        for (File hamlFile : fileList) {
             try {
                 String hamlOutput = getHamlOutput(hamlFile);
                 File outputFile = new File(configuration.getOutputPath()

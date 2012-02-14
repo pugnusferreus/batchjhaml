@@ -46,6 +46,7 @@ Add the following in your build.xml. Of course, you need to modify the xml accor
     <arg value="jsp"/>
     <arg value="~/BatchJHaml/javascripts"/>
     <arg value="~/BatchJHaml/stylesheets"/>
+    <arg value="true"/> <!-- sets build recursively or not -->
   </java>
 </target>
 
