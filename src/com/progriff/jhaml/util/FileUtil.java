@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 public class FileUtil {
@@ -34,20 +35,44 @@ public class FileUtil {
         };
     }
 
+    /**
+     * Returns a filter that accepts filenames that: <br/>
+     * <ul>
+     * <li/>doesn't start with "."
+     * <li/>ends with ".haml"
+     * </ul>
+     * 
+     * @return the FilenameFilter object.
+     */
+    public static IOFileFilter getHamlIOFilenameFilter() {
+        return new IOFileFilter() {
+
+            @Override
+            public boolean accept(File dir, String name) {
+                return !name.startsWith(".") && name.endsWith(".haml");
+            }
+
+            @Override
+            public boolean accept(File dir) {
+                return !dir.getName().startsWith(".")
+                        && dir.getName().endsWith(".haml");
+            }
+        };
+    }
+
     @SuppressWarnings("unchecked")
-    public static List<File> listFiles(String path,
-            FilenameFilter fileNameFilter, boolean recursive) {
+    public static List<File> listFiles(String path, boolean recursive) {
         if (recursive) {
             Collection<File> files = FileUtils.listFiles(new File(path),
-                    TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+                    getHamlIOFilenameFilter(), TrueFileFilter.INSTANCE);
 
             return new ArrayList<File>(files);
         } else {
             File file = new File(path);
-            if (file == null || file.listFiles(fileNameFilter) == null) {
+            if (file == null || file.listFiles(getHamlFilenameFilter()) == null) {
                 return new ArrayList<File>();
             }
-            return Arrays.asList(file.listFiles(fileNameFilter));
+            return Arrays.asList(file.listFiles(getHamlFilenameFilter()));
         }
 
     }

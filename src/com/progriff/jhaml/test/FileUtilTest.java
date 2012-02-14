@@ -12,15 +12,13 @@ import com.progriff.jhaml.util.FileUtil;
 public class FileUtilTest {
     @Test
     public void testListFiles_withoutRecursion() {
-        List<File> files = FileUtil.listFiles("unitTest/hamlTest",
-                FileUtil.getHamlFilenameFilter(), false);
+        List<File> files = FileUtil.listFiles("unitTest/hamlTest", false);
         assertEquals(1, files.size());
     }
 
     @Test
     public void testListFiles_withRecursion() {
-        List<File> files = FileUtil.listFiles("unitTest/hamlTest",
-                FileUtil.getHamlFilenameFilter(), true);
+        List<File> files = FileUtil.listFiles("unitTest/hamlTest", true);
         assertEquals(2, files.size());
     }
 

@@ -71,7 +71,7 @@ public class BatchJHaml {
         populateLayouts();
 
         List<File> fileList = FileUtil.listFiles(configuration.getHamlPath(),
-                FileUtil.getHamlFilenameFilter(), configuration.isRecursive());
+                configuration.isRecursive());
 
         for (File hamlFile : fileList) {
             try {
